@@ -1,0 +1,19 @@
+[
+  {
+    "_id": "6596v2des9f89525c9s49red5fs",
+    "reportedAt": "01-01-2023",
+    "createdBy": "6596v2des9f89525c9s49red5fs",
+    "coordinates": [-81.0784, 24.707496],
+    "location": {
+      "description": "Aspen, USA",
+      "type": "Point",
+      "coordinates": [-106.822318, 39.190872],
+      "address": "419 S Mill St, Aspen, CO 81611, USA"
+    },
+    "supportCount": 0,
+    "notSupportCount": 10,
+    "appointedTo": "65mwekd2xc5ewcx1we5xs15we",
+    "description": "Wastage Material near entry gate.",
+    "images": ["images1.jpg", "images2.jpg", "images3.jpg"]
+  }
+]
