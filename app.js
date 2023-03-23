@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const monogoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const compression = require('compression');
 
 const AppError = require('./utils/appError');
 const userRouter = require('./routes/userRoutes');
@@ -41,6 +42,9 @@ app.use(xss());
 
 // Prevent Parameter Pollution
 app.use(hpp());
+
+// Compress Node Modules
+app.use(compression());
 
 // Routes
 app.use('/api/v1/users', userRouter);
