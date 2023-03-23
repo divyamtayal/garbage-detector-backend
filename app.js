@@ -8,6 +8,7 @@ const hpp = require('hpp');
 
 const AppError = require('./utils/appError');
 const userRouter = require('./routes/userRoutes');
+const reportRouter = require('./routes/reportRoutes');
 const globalErrorHandler = require('./controllers/errorController');
 
 const app = express();
@@ -43,6 +44,7 @@ app.use(hpp());
 
 // Routes
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/reports', reportRouter);
 
 // Handle Unhandle Routes
 app.all('*', (req, res, next) => {

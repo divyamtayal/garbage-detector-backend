@@ -12,8 +12,8 @@
     },
     "supportCount": 0,
     "notSupportCount": 10,
-    "appointedTo": "65mwekd2xc5ewcx1we5xs15we",
     "description": "Wastage Material near entry gate.",
-    "images": ["images1.jpg", "images2.jpg", "images3.jpg"]
+    "images": ["images1.jpg", "images2.jpg", "images3.jpg"],
+    "reportResolved": false
   }
 ]
