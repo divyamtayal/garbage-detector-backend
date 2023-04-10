@@ -18,13 +18,13 @@ router.patch('/updateMe', authController.protect, userController.updateMe);
 router.delete('/deleteMe', authController.protect, userController.deleteMe);
 
 router
-  .route('/')
+  .route('/getAllUsers')
   .get(
     authController.protect,
     authController.restrictTo('admin'),
     userController.getAllUsers
   );
 
-router.route('/:id').get(authController.protect, userController.getUser);
+router.route('/').get(authController.protect, userController.getUser);
 
 module.exports = router;
