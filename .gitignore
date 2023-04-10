@@ -93,3 +93,4 @@ dist
 .pnp.*
 
 # Environment Varibale File
+config.env

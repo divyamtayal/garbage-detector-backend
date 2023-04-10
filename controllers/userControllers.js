@@ -22,9 +22,13 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
 });
 
 exports.getUser = catchAsync(async (req, res, next) => {
-  res
-    .status(500)
-    .json({ status: 'error', message: 'Route not yet implemented' });
+  const user = await User.findById(req.user.id);
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user
+    }
+  });
 });
 
 exports.deleteMe = catchAsync(async (req, res, next) => {
