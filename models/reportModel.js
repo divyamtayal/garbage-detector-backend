@@ -39,9 +39,10 @@ const reportSchema = new mongoose.Schema({
     assignedBy: { type: mongoose.Schema.ObjectId, ref: 'User' },
     assignedAt: Date
   },
-  reportResolved: {
-    type: Boolean,
-    default: false
+  status: {
+    type: String,
+    enum: ['open', 'resolved', 'requested', 'assigned'],
+    default: 'open'
   },
   requestedBy: [mongoose.Schema.ObjectId],
   images: String
