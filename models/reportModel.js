@@ -44,7 +44,7 @@ const reportSchema = new mongoose.Schema({
     default: false
   },
   requestedBy: [mongoose.Schema.ObjectId],
-  images: [String]
+  images: String
 });
 
 reportSchema.pre(/^find/, function(next) {
