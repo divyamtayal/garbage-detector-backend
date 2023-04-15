@@ -15,7 +15,23 @@ router
   .post(
     authController.protect,
     authController.restrictTo('admin'),
-    reportController.asiignReportToCleaner
+    reportController.assignReportToCleaner
+  );
+
+router
+  .route('/requestReport')
+  .post(
+    authController.protect,
+    authController.restrictTo('cleaner'),
+    reportController.requestReport
+  );
+
+router
+  .route('/approveReportRequest')
+  .post(
+    authController.protect,
+    authController.restrictTo('admin'),
+    reportController.approveReportRequest
   );
 
 router
