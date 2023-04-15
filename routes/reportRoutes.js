@@ -46,4 +46,8 @@ router
   .route('/reportsAssigned')
   .get(authController.protect, reportController.getReportsAssignedToUser);
 
+router
+  .route('/reportsRequested')
+  .get(authController.protect, reportController.getReportsRequestedToUser);
+
 module.exports = router;

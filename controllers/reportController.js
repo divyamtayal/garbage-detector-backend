@@ -59,6 +59,20 @@ exports.getReportsAssignedToUser = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getReportsRequestedToUser = catchAsync(async (req, res, next) => {
+  const reports = await Report.find({
+    requestedBy: { $in: req.user.id }
+  });
+
+  res.status(201).json({
+    status: 'success',
+    result: reports.length,
+    data: {
+      requestedReports: reports
+    }
+  });
+});
+
 exports.assignReportToCleaner = catchAsync(async (req, res, next) => {
   const { cleanerId, reportId } = req.body;
 
