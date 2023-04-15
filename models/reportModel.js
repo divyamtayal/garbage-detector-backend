@@ -43,6 +43,7 @@ const reportSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  requestedBy: [mongoose.Schema.ObjectId],
   images: [String]
 });
 
