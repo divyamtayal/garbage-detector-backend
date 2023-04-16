@@ -10,6 +10,18 @@ router.post(
   reportController.createReport
 );
 
+router.post(
+  '/supportReport',
+  authController.protect,
+  reportController.supportReport
+);
+
+router.post(
+  '/notSupportReport',
+  authController.protect,
+  reportController.notSupportReport
+);
+
 router
   .route('/assignReportToCleaner')
   .post(
