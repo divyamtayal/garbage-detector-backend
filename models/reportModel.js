@@ -10,10 +10,10 @@ const reportSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  notSupportCount: {
-    type: Number,
-    default: 0
-  },
+  // notSupportCount: {
+  //   type: Number,
+  //   default: 0
+  // },
   location: {
     coordinates: {
       lat: {
@@ -46,7 +46,6 @@ const reportSchema = new mongoose.Schema({
   },
   requestedBy: [mongoose.Schema.ObjectId],
   supportedBy: [mongoose.Schema.ObjectId],
-  notSupportedBy: [mongoose.Schema.ObjectId],
   images: String
 });
 

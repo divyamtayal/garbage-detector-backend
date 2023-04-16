@@ -45,7 +45,7 @@ exports.supportReport = catchAsync(async (req, res, next) => {
   res.status(200).json({ status: 'success', report });
 });
 
-exports.notSupportReport = catchAsync(async (req, res, next) => {
+exports.unSupportReport = catchAsync(async (req, res, next) => {
   const { reportId } = req.body;
 
   //   1) Check if report exists
@@ -54,17 +54,22 @@ exports.notSupportReport = catchAsync(async (req, res, next) => {
     return next(new AppError('Report does not exists', 404));
   }
 
-  // 3) Check if notSupported already
-  const isInArray = report.notSupportedBy.some(function(notSupportedBy) {
+  // 3) Check if unSupported already
+  const isInArray = report.supportedBy.some(function(notSupportedBy) {
     return notSupportedBy.equals(req.user._id);
   });
-  if (isInArray) {
-    return next(new AppError('Already not Supported by user', 404));
+  if (!isInArray) {
+    return next(
+      new AppError(
+        'You cannot unsupport this report. Please Support it first.',
+        404
+      )
+    );
   }
 
-  //   5) Not Support Report
-  report.notSupportedBy.push(req.user._id);
-  report.notSupportCount += 1;
+  //   5) UnSupport Report
+  report.supportedBy.remove(req.user._id);
+  report.supportCount -= 1;
 
   await report.save({ validateModifiedOnly: true });
 
