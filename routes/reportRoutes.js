@@ -17,9 +17,9 @@ router.post(
 );
 
 router.post(
-  '/notSupportReport',
+  '/unSupportReport',
   authController.protect,
-  reportController.notSupportReport
+  reportController.unSupportReport
 );
 
 router
