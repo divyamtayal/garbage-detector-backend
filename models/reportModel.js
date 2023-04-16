@@ -45,6 +45,8 @@ const reportSchema = new mongoose.Schema({
     default: 'open'
   },
   requestedBy: [mongoose.Schema.ObjectId],
+  supportedBy: [mongoose.Schema.ObjectId],
+  notSupportedBy: [mongoose.Schema.ObjectId],
   images: String
 });
 

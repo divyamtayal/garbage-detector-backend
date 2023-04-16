@@ -1,7 +1,6 @@
 const Report = require('../models/reportModel');
 const User = require('../models/userModel');
 const AppError = require('../utils/appError');
-// const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 
 exports.createReport = catchAsync(async (req, res, next) => {
@@ -18,6 +17,91 @@ exports.createReport = catchAsync(async (req, res, next) => {
       report: newReport
     }
   });
+});
+
+exports.supportReport = catchAsync(async (req, res, next) => {
+  const { reportId } = req.body;
+
+  //   1) Check if report exists
+  const report = await Report.findById(reportId);
+  if (!report) {
+    return next(new AppError('Report does not exists', 404));
+  }
+
+  // 3) Check if supported already
+  const isInArray = report.supportedBy.some(function(supportedBy) {
+    return supportedBy.equals(req.user._id);
+  });
+  if (isInArray) {
+    return next(new AppError('Already supported by user', 404));
+  }
+
+  //   5) Support Report
+  report.supportedBy.push(req.user._id);
+  report.supportCount += 1;
+
+  await report.save({ validateModifiedOnly: true });
+
+  res.status(200).json({ status: 'success', report });
+});
+
+exports.notSupportReport = catchAsync(async (req, res, next) => {
+  const { reportId } = req.body;
+
+  //   1) Check if report exists
+  const report = await Report.findById(reportId);
+  if (!report) {
+    return next(new AppError('Report does not exists', 404));
+  }
+
+  // 3) Check if notSupported already
+  const isInArray = report.notSupportedBy.some(function(notSupportedBy) {
+    return notSupportedBy.equals(req.user._id);
+  });
+  if (isInArray) {
+    return next(new AppError('Already not Supported by user', 404));
+  }
+
+  //   5) Not Support Report
+  report.notSupportedBy.push(req.user._id);
+  report.notSupportCount += 1;
+
+  await report.save({ validateModifiedOnly: true });
+
+  res.status(200).json({ status: 'success', report });
+});
+
+exports.requestReport = catchAsync(async (req, res, next) => {
+  const { reportId } = req.body;
+
+  //   2) Check if report exists
+  const report = await Report.findById(reportId);
+  if (!report) {
+    return next(new AppError('Report does not exists', 404));
+  }
+
+  // 3) Check if report is assigned to someone
+  const { assignedBy } = report.assignedInfo;
+  if (assignedBy != null) {
+    return next(
+      new AppError('Report already assigned. You cannot request it', 404)
+    );
+  }
+
+  // 4) Check if requested already
+  const isInArray = report.requestedBy.some(function(requestedBy) {
+    return requestedBy.equals(req.user._id);
+  });
+  if (isInArray) {
+    return next(new AppError('Already requested by user', 404));
+  }
+
+  //   5) Request Report to cleaner
+  report.requestedBy.push(req.user._id);
+
+  await report.save({ validateModifiedOnly: true });
+
+  res.status(200).json({ status: 'success', report });
 });
 
 // Restricted to admin only
@@ -61,7 +145,7 @@ exports.getReportsAssignedToUser = catchAsync(async (req, res, next) => {
 
 exports.getReportsRequestedToUser = catchAsync(async (req, res, next) => {
   const reports = await Report.find({
-    requestedBy: { $in: req.user.id }
+    requestedBy: { $in: req.user._id }
   });
 
   res.status(201).json({
@@ -102,46 +186,6 @@ exports.assignReportToCleaner = catchAsync(async (req, res, next) => {
   };
 
   report.assignedInfo = assignedInfo;
-  await report.save({ validateModifiedOnly: true });
-
-  res.status(200).json({ status: 'success', report });
-});
-
-exports.requestReport = catchAsync(async (req, res, next) => {
-  const { reportId } = req.body;
-
-  // 1) Check if cleaner exists
-  const cleanerId = req.user._id;
-  const cleaner = await User.findById(cleanerId);
-  if (!cleaner) {
-    return next(new AppError('Cleaner no longer exists.', 404));
-  }
-
-  //   2) Check if report exists
-  const report = await Report.findById(reportId);
-  if (!report) {
-    return next(new AppError('Report does not exists', 404));
-  }
-
-  // 3) Check if report is assigned to someone
-  const { assignedBy } = report.assignedInfo;
-  if (assignedBy != null) {
-    return next(
-      new AppError('Report already assigned. You cannot request it', 404)
-    );
-  }
-
-  // 4) Check if requested already
-  const isInArray = report.requestedBy.some(function(requestedBy) {
-    return requestedBy.equals(req.user.id);
-  });
-  if (isInArray) {
-    return next(new AppError('Already requested by user', 404));
-  }
-
-  //   5) Request Report to cleaner
-  report.requestedBy.push(req.user._id);
-
   await report.save({ validateModifiedOnly: true });
 
   res.status(200).json({ status: 'success', report });
