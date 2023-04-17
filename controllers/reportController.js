@@ -148,20 +148,20 @@ exports.getReportsAssignedToUser = catchAsync(async (req, res, next) => {
   });
 });
 
-// exports.reportRequestedUsers = catchAsync(async (req, res, next) => {
-//   const { reportId } = req.body;
+exports.reportRequestedUsers = catchAsync(async (req, res, next) => {
+  const { reportId } = req.body;
 
-//   const report = await Report.findById(reportId)
-//     .populate('requestedBy')
-//     .select('requestedBy');
+  const report = await Report.findById(reportId)
+    .populate('requestedBy')
+    .select('requestedBy');
 
-//   res.status(201).json({
-//     status: 'success',
-//     data: {
-//       report
-//     }
-//   });
-// });
+  res.status(201).json({
+    status: 'success',
+    data: {
+      report
+    }
+  });
+});
 
 exports.getReportsRequestedToUser = catchAsync(async (req, res, next) => {
   const reports = await Report.find({
