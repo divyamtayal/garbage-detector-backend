@@ -56,15 +56,13 @@ reportSchema.pre(/^find/, function(next) {
       path: 'assignedTo assignedBy',
       select: '-role -__v'
     }
-  })
-    .populate({
-      path: 'createdInfo',
-      populate: {
-        path: 'createdBy',
-        select: '-role -__v'
-      }
-    })
-    .populate('requestedBy');
+  }).populate({
+    path: 'createdInfo',
+    populate: {
+      path: 'createdBy',
+      select: '-role -__v'
+    }
+  });
   next();
 });
 
