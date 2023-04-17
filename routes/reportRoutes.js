@@ -64,8 +64,8 @@ router
 
 module.exports = router;
 
-router
-  .route('/reportRequestedUsers')
-  .get(authController.protect, reportController.reportRequestedUsers);
+// router
+//   .route('/reportRequestedUsers')
+//   .get(authController.protect, reportController.reportRequestedUsers);
 
 module.exports = router;
