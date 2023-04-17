@@ -44,8 +44,8 @@ const reportSchema = new mongoose.Schema({
     enum: ['open', 'resolved', 'requested', 'assigned'],
     default: 'open'
   },
-  requestedBy: [mongoose.Schema.ObjectId],
-  supportedBy: [mongoose.Schema.ObjectId],
+  requestedBy: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
+  supportedBy: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
   images: String
 });
 
