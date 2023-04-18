@@ -151,7 +151,7 @@ exports.requestCompletedReport = catchAsync(async (req, res, next) => {
 
   //   3) Completed Request Report to cleaner
   report.completedRequest = req.user._id;
-  report.status = 'complete request';
+  report.status = 'completed request';
 
   await report.save({ validateModifiedOnly: true });
   res.status(200).json({ status: 'success', report });
