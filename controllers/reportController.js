@@ -206,7 +206,7 @@ exports.getReportsResolvedByUser = catchAsync(async (req, res, next) => {
     status: 'success',
     result: reports.length,
     data: {
-      assignedReports: reports
+      resolvedReports: reports
     }
   });
 });
