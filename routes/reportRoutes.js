@@ -96,4 +96,12 @@ router
     reportController.getReportsRequestedToUser
   );
 
+router
+  .route('/reportsResolved')
+  .get(
+    authController.protect,
+    authController.restrictTo('cleaner'),
+    reportController.getReportsResolvedByUser
+  );
+
 module.exports = router;
