@@ -196,6 +196,20 @@ exports.getReportsAssignedToUser = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getReportsResolvedByUser = catchAsync(async (req, res, next) => {
+  const reports = await Report.find({
+    'completedInfo.completedBy': req.user._id
+  });
+
+  res.status(201).json({
+    status: 'success',
+    result: reports.length,
+    data: {
+      assignedReports: reports
+    }
+  });
+});
+
 exports.reportRequestedUsers = catchAsync(async (req, res, next) => {
   const { reportId } = req.body;
 
