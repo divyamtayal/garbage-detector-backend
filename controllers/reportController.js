@@ -184,7 +184,8 @@ exports.getReportsCreatedByUser = catchAsync(async (req, res, next) => {
 
 exports.getReportsAssignedToUser = catchAsync(async (req, res, next) => {
   const reports = await Report.find({
-    'assignedInfo.assignedTo': req.user._id
+    'assignedInfo.assignedTo': req.user._id,
+    status: { $ne: 'resolved' }
   });
 
   res.status(201).json({
@@ -227,7 +228,8 @@ exports.reportRequestedUsers = catchAsync(async (req, res, next) => {
 
 exports.getReportsRequestedToUser = catchAsync(async (req, res, next) => {
   const reports = await Report.find({
-    requestedBy: { $in: req.user._id }
+    requestedBy: { $in: req.user._id },
+    status: { $ne: 'resolved' }
   });
 
   res.status(201).json({
