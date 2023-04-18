@@ -85,6 +85,10 @@ exports.requestReport = catchAsync(async (req, res, next) => {
     return next(new AppError('Report does not exists', 404));
   }
 
+  if (report.status === 'resolved') {
+    return next(new AppError('Report already resolved successfully', 404));
+  }
+
   // 3) Check if report is assigned to someone
   const { assignedBy } = report.assignedInfo;
   if (assignedBy != null) {
@@ -106,6 +110,50 @@ exports.requestReport = catchAsync(async (req, res, next) => {
 
   await report.save({ validateModifiedOnly: true });
 
+  res.status(200).json({ status: 'success', report });
+});
+
+exports.requestCompletedReport = catchAsync(async (req, res, next) => {
+  const { reportId } = req.body;
+
+  //   1) Check if report exists
+  const report = await Report.findById(reportId);
+  if (!report) {
+    return next(new AppError('Report does not exists', 404));
+  }
+
+  // 2) Check STatus
+  if (report.status === 'resolved') {
+    return next(new AppError('Report already resolved successfully', 404));
+  }
+  if (report.status === 'completed request') {
+    return next(new AppError('You cannot make completed request again.', 404));
+  }
+  if (report.status !== 'assigned') {
+    return next(
+      new AppError(
+        'Report not assigned to any cleaner. This request for completion of this report cannot be done.',
+        404
+      )
+    );
+  }
+
+  // 2) Check if report is assigned to user
+  const { assignedTo } = report.assignedInfo;
+  if (!assignedTo._id.equals(req.user._id)) {
+    return next(
+      new AppError(
+        'Report not assigned to you. You cannot request for completion of this report.',
+        404
+      )
+    );
+  }
+
+  //   3) Completed Request Report to cleaner
+  report.completedRequest = req.user._id;
+  report.status = 'complete request';
+
+  await report.save({ validateModifiedOnly: true });
   res.status(200).json({ status: 'success', report });
 });
 
@@ -226,6 +274,10 @@ exports.approveReportRequest = catchAsync(async (req, res, next) => {
     return next(new AppError('Report does not exists', 404));
   }
 
+  if (report.status === 'resolved') {
+    return next(new AppError('Report already resolved successfully', 404));
+  }
+
   // 3) Check if report is assigned to someone
   const { assignedBy } = report.assignedInfo;
   if (assignedBy != null) {
@@ -253,6 +305,49 @@ exports.approveReportRequest = catchAsync(async (req, res, next) => {
   };
 
   report.assignedInfo = assignedInfo;
+  report.status = 'assigned';
+  await report.save({ validateModifiedOnly: true });
+
+  res.status(200).json({ status: 'success', report });
+});
+
+exports.approveCompletedRequest = catchAsync(async (req, res, next) => {
+  const { cleanerId, reportId } = req.body;
+
+  // 1) Check if cleaner exists
+  const cleaner = await User.findById(cleanerId);
+  if (!cleaner) {
+    return next(new AppError('Cleaner no longer exists.', 404));
+  }
+
+  //   2) Check if report exists
+  const report = await Report.findById(reportId);
+  if (!report) {
+    return next(new AppError('Report does not exists', 404));
+  }
+
+  // 3) Check Status
+  if (report.status === 'resolved') {
+    return next(new AppError('Report already resolved successfully', 404));
+  }
+  if (
+    report.status !== 'completed request' ||
+    report.completedRequest == null
+  ) {
+    return next(
+      new AppError('Completed request is not done for this report.', 404)
+    );
+  }
+
+  //   5) Approve Report Complete Request to cleaner
+  const completedInfo = {
+    completedBy: cleanerId,
+    approvedBy: req.user._id,
+    approvedAt: Date.now()
+  };
+
+  report.completedInfo = completedInfo;
+  report.status = 'resolved';
   await report.save({ validateModifiedOnly: true });
 
   res.status(200).json({ status: 'success', report });

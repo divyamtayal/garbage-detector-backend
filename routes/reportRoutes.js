@@ -23,20 +23,21 @@ router.post(
 );
 
 router
-  .route('/assignReportToCleaner')
-  .post(
-    authController.protect,
-    authController.restrictTo('admin'),
-    reportController.assignReportToCleaner
-  );
+  .route('/getAllReports')
+  .get(authController.protect, reportController.getAllReports);
 
 router
-  .route('/requestReport')
-  .post(
-    authController.protect,
-    authController.restrictTo('cleaner'),
-    reportController.requestReport
-  );
+  .route('/reportsCreated')
+  .get(authController.protect, reportController.getReportsCreatedByUser);
+
+// ADMIN
+// router
+//   .route('/assignReportToCleaner')
+//   .post(
+//     authController.protect,
+//     authController.restrictTo('admin'),
+//     reportController.assignReportToCleaner
+//   );
 
 router
   .route('/approveReportRequest')
@@ -47,25 +48,52 @@ router
   );
 
 router
-  .route('/getAllReports')
-  .get(authController.protect, reportController.getAllReports);
-
-router
-  .route('/reportsCreated')
-  .get(authController.protect, reportController.getReportsCreatedByUser);
-
-router
-  .route('/reportsAssigned')
-  .get(authController.protect, reportController.getReportsAssignedToUser);
-
-router
-  .route('/reportsRequested')
-  .get(authController.protect, reportController.getReportsRequestedToUser);
-
-module.exports = router;
+  .route('/approveReportCompletedRequest')
+  .post(
+    authController.protect,
+    authController.restrictTo('admin'),
+    reportController.approveCompletedRequest
+  );
 
 router
   .route('/reportRequestedUsers')
-  .get(authController.protect, reportController.reportRequestedUsers);
+  .get(
+    authController.protect,
+    authController.restrictTo('admin'),
+    reportController.reportRequestedUsers
+  );
+
+// CLEANER
+router
+  .route('/requestReport')
+  .post(
+    authController.protect,
+    authController.restrictTo('cleaner'),
+    reportController.requestReport
+  );
+
+router
+  .route('/requestCompletedReport')
+  .post(
+    authController.protect,
+    authController.restrictTo('cleaner'),
+    reportController.requestCompletedReport
+  );
+
+router
+  .route('/reportsAssigned')
+  .get(
+    authController.protect,
+    authController.restrictTo('cleaner'),
+    reportController.getReportsAssignedToUser
+  );
+
+router
+  .route('/reportsRequested')
+  .get(
+    authController.protect,
+    authController.restrictTo('cleaner'),
+    reportController.getReportsRequestedToUser
+  );
 
 module.exports = router;
