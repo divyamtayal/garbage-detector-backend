@@ -39,14 +39,20 @@ const reportSchema = new mongoose.Schema({
     assignedBy: { type: mongoose.Schema.ObjectId, ref: 'User' },
     assignedAt: Date
   },
+  completedInfo: {
+    completedBy: { type: mongoose.Schema.ObjectId, ref: 'User' },
+    approvedBy: { type: mongoose.Schema.ObjectId, ref: 'User' },
+    approvedAt: Date
+  },
   status: {
     type: String,
-    enum: ['open', 'resolved', 'requested', 'assigned'],
+    enum: ['open', 'resolved', 'assigned', 'completed request'],
     default: 'open'
   },
   requestedBy: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
   supportedBy: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
-  images: String
+  images: String,
+  completedRequest: { type: mongoose.Schema.ObjectId, ref: 'User' }
 });
 
 reportSchema.pre(/^find/, function(next) {
@@ -56,13 +62,21 @@ reportSchema.pre(/^find/, function(next) {
       path: 'assignedTo assignedBy',
       select: '-role -__v'
     }
-  }).populate({
-    path: 'createdInfo',
-    populate: {
-      path: 'createdBy',
-      select: '-role -__v'
-    }
-  });
+  })
+    .populate({
+      path: 'createdInfo',
+      populate: {
+        path: 'createdBy',
+        select: '-role -__v'
+      }
+    })
+    .populate({
+      path: 'completedInfo',
+      populate: {
+        path: 'completedBy approvedBy',
+        select: '-role -__v'
+      }
+    });
   next();
 });
 
