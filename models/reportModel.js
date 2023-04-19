@@ -76,7 +76,9 @@ reportSchema.pre(/^find/, function(next) {
         path: 'completedBy approvedBy',
         select: '-role -__v'
       }
-    });
+    })
+    .populate('completedRequest')
+    .sort({ 'createdInfo.createdAt': 'desc' });
   next();
 });
 
