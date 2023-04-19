@@ -371,14 +371,14 @@ exports.approveCompletedRequest = catchAsync(async (req, res, next) => {
 
   report.completedInfo = completedInfo;
   report.status = 'resolved';
-  report.populate({
+  const newReport = await report.save({ validateModifiedOnly: true });
+  const x = await newReport.populate({
     path: 'completedInfo',
     populate: {
       path: 'completedBy approvedBy',
       select: '-role -__v'
     }
   });
-  await report.save({ validateModifiedOnly: true });
 
-  res.status(200).json({ status: 'success', report });
+  res.status(200).json({ status: 'success', report: x });
 });
