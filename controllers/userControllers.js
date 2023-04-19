@@ -17,7 +17,7 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   const users = await Users.find();
 
   res
-    .status(500)
+    .status(200)
     .json({ status: 'success', results: users.length, data: { users } });
 });
 
