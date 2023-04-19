@@ -322,16 +322,15 @@ exports.approveReportRequest = catchAsync(async (req, res, next) => {
 
   report.assignedInfo = assignedInfo;
   report.status = 'assigned';
-  report.populate({
+  const newReport = await report.save({ validateModifiedOnly: true });
+  const x = await newReport.populate({
     path: 'assignedInfo',
     populate: {
       path: 'assignedTo assignedBy',
       select: '-role -__v'
     }
   });
-  await report.save({ validateModifiedOnly: true });
-
-  res.status(200).json({ status: 'success', report });
+  res.status(200).json({ status: 'success', report: x });
 });
 
 exports.approveCompletedRequest = catchAsync(async (req, res, next) => {
