@@ -21,8 +21,18 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
     .json({ status: 'success', results: users.length, data: { users } });
 });
 
-exports.getUser = catchAsync(async (req, res, next) => {
+exports.myProfile = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.user.id);
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user
+    }
+  });
+});
+
+exports.getUser = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.body.userId);
   res.status(200).json({
     status: 'success',
     data: {

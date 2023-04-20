@@ -25,6 +25,14 @@ router
     userController.getAllUsers
   );
 
-router.route('/').get(authController.protect, userController.getUser);
+router
+  .route('/getUser')
+  .get(
+    authController.protect,
+    authController.restrictTo('admin'),
+    userController.getUser
+  );
+
+router.route('/').get(authController.protect, userController.myProfile);
 
 module.exports = router;
