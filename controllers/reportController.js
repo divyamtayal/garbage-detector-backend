@@ -19,6 +19,17 @@ exports.createReport = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getReport = catchAsync(async (req, res, next) => {
+  const report = await Report.findById(req.body.reportId);
+
+  res.status(201).json({
+    status: 'success',
+    data: {
+      report
+    }
+  });
+});
+
 exports.supportReport = catchAsync(async (req, res, next) => {
   const { reportId } = req.body;
 

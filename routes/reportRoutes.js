@@ -10,6 +10,8 @@ router.post(
   reportController.createReport
 );
 
+router.get('/getReport', authController.protect, reportController.getReport);
+
 router.post(
   '/supportReport',
   authController.protect,
@@ -30,7 +32,6 @@ router
   .route('/reportsCreated')
   .get(authController.protect, reportController.getReportsCreatedByUser);
 
-// ADMIN
 // router
 //   .route('/assignReportToCleaner')
 //   .post(
@@ -39,6 +40,7 @@ router
 //     reportController.assignReportToCleaner
 //   );
 
+// ADMIN ---------------------------------------------------------------
 router
   .route('/approveReportRequest')
   .post(
@@ -63,7 +65,7 @@ router
     reportController.reportRequestedUsers
   );
 
-// CLEANER
+// CLEANER ---------------------------------------------------------------
 router
   .route('/requestReport')
   .post(
