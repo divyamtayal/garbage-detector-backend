@@ -81,7 +81,7 @@ exports.googleLogin = catchAsync(async (req, res, next) => {
   res.status(201).json({
     status: 'success',
     data: {
-      header: req.headers.authorization
+      header: req.body.idToken
     }
   });
 });
