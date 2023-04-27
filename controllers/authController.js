@@ -77,6 +77,15 @@ exports.login = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
+exports.googleLogin = catchAsync(async (req, res, next) => {
+  res.status(201).json({
+    status: 'success',
+    data: {
+      header: req.headers.authorization
+    }
+  });
+});
+
 exports.protect = catchAsync(async (req, res, next) => {
   // 1) Getting the token and check if its there
   let token;
