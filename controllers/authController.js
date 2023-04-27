@@ -78,11 +78,9 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 exports.googleLogin = catchAsync(async (req, res, next) => {
-  res.status(201).json({
+  res.status(404).json({
     status: 'success',
-    data: {
-      header: req.body.idToken
-    }
+    data: 'This route is yet to be implemented'
   });
 });
 
