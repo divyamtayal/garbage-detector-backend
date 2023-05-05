@@ -32,3 +32,24 @@ exports.updateDustbinBotStatus = catchAsync(async (req, res, next) => {
     }
   });
 });
+
+exports.getAllDustbinBots = catchAsync(async (req, res, next) => {
+  const data = await DustbinBot.find();
+
+  res.status(201).json({
+    status: 'success',
+    length: data.length,
+    data: data
+  });
+});
+
+exports.getDustbinBot = catchAsync(async (req, res, next) => {
+  const dustbinBot = await DustbinBot.findById(req.body.dustbinBotId);
+
+  res.status(201).json({
+    status: 'success',
+    data: {
+      dustbinBot
+    }
+  });
+});
