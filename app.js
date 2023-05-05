@@ -10,6 +10,7 @@ const compression = require('compression');
 const AppError = require('./utils/appError');
 const userRouter = require('./routes/userRoutes');
 const reportRouter = require('./routes/reportRoutes');
+const dustbinBotRouter = require('./routes/dustbinBotRoutes');
 const globalErrorHandler = require('./controllers/errorController');
 
 const app = express();
@@ -49,6 +50,7 @@ app.use(compression());
 // Routes
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reports', reportRouter);
+app.use('/api/v1/dustbinBot', dustbinBotRouter);
 
 // Handle Unhandle Routes
 app.all('*', (req, res, next) => {
