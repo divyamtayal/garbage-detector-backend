@@ -17,12 +17,12 @@ exports.registerDustbinBot = catchAsync(async (req, res, next) => {
 });
 
 exports.updateDustbinBotStatus = catchAsync(async (req, res, next) => {
-  const dustbinBot = await DustbinBot.findById(req.body.id);
+  const dustbinBot = await DustbinBot.findById(req.query.id);
   if (!dustbinBot) {
     return next(new AppError('Dustbin Bot does not exists', 404));
   }
 
-  dustbinBot.dustbinStatus.push({ perFilled: req.body.perFilled });
+  dustbinBot.dustbinStatus.push({ perFilled: req.query.perFilled });
   const updatedDustbin = await dustbinBot.save({ validateModifiedOnly: true });
 
   res.status(201).json({
